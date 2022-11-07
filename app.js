@@ -1,24 +1,30 @@
-window.onload = function() {
-    let searchBtn = document.getElementById("search-btn");
+window.onload = function(){
+    var searchBtn =document.getElementById('search-btn');
+    var searchRes = document.getElementById('result');
+    var avenger = document.getElementById('search-field');
+    var xmlReq = new XMLHttpRequest();
+    
+    xmlReq.addEventListener("load",() =>{
+        let output = xmlReq.responseText;
+        searchRes.innerHTML = output;
+    });
 
-    searchBtn.addEventListener('click', function(event) {
-        let url = "superheroes.php"
-        event.preventDefault();
+    searchBtn.addEventListener('click', () => {
 
-        fetch(url)
+        let searchQuery='superheroes.php?query='+avenger.value;
+        
+        fetch(searchQuery)
             .then(response => {
                 if (response.ok) {
-                    return response.text()
+                    xmlReq.open('GET',searchQuery);
+                    xmlReq.send();
+                    return response.text()   
                 } 
                 else {
                     let error = Promise.reject('An error has occured')
                     console.log(error)
                     return error
-                    
                 }
             })
-            .then(superheroes => {
-               alert(superheroes);
-            })
-    });
+        })
 }

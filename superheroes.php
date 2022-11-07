@@ -1,4 +1,6 @@
 <?php
+//variable to store what was inputted in search input field
+$avenSearch = $_GET['query']; 
 
 $superheroes = [
   [
@@ -63,10 +65,42 @@ $superheroes = [
   ], 
 ];
 
+//function to search through an array and determine if target element is in array 
+function search($avenSearch,$array){
+    foreach($array as $object){
+        if(strcasecmp($object['name'],$avenSearch)== 0 || strcasecmp($object['alias'],$avenSearch) == 0 ){
+            return $object;
+        }
+    }
+    return "Not found";
+}
+
 ?>
 
-<ul>
-<?php foreach ($superheroes as $superhero): ?>
-  <li><?= $superhero['alias']; ?></li>
-<?php endforeach; ?>
-</ul>
+<!-- condition to check if the input field is empy when search button is clicked then the array of super heroes will be returned-->
+<?php if($avenSearch == ""){ ?>
+    <ul>
+    <?php foreach ($superheroes as $superhero): ?>
+    <li><?= $superhero['alias']; ?></li>
+    <!-- close the block of the for each loop -->
+    <?php endforeach; ?>
+    </ul>
+<?php } ?>
+
+<!--variable to biographies of the avenger search and found for-->
+<?php $bio = search($avenSearch,$superheroes); ?>
+
+<?php if($bio == "Not found" && $avenSearch != ""){ 
+    ?>
+        <!--changes font color to red-->
+        <h3 style="color:red">Superhero not found</h3>
+    <?php 
+    }
+    else{
+        ?>
+        <!--returns the respective fields of the avenger found-->
+            <h3><?= $bio['alias'];?></h3>
+            <h4>A.K.A <?= $bio['name'];?></h4>
+            <p><?= $bio['biography'];
+    }?>
+<?php
